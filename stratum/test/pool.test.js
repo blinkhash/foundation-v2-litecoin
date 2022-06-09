@@ -1,13 +1,13 @@
 const Daemon = require('../../daemon/main/daemon');
 const Pool = require('../main/pool');
-const config = require('../../configs/bitcoin');
+const config = require('../../configs/example');
 const configMain = require('../../configs/main');
 const events = require('events');
 const nock = require('nock');
 const testdata = require('../../daemon/test/daemon.mock');
 
-config.primary.address = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
-config.primary.recipients[0].address = '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2';
+config.primary.address = 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry';
+config.primary.recipients[0].address = 'LRJeNFbLC28wA4hYfiV2Dyjb6hK9pLTD5y';
 
 const auxiliaryConfig = {
   'enabled': true,
@@ -62,7 +62,7 @@ function mockSetupDaemons(primary, auxiliary, callback) {
 function mockSetupSettings(pool, callback) {
   nock('http://127.0.0.1:8332')
     .post('/').reply(200, JSON.stringify([
-      { id: 'nocktest', error: null, result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+      { id: 'nocktest', error: null, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
       { id: 'nocktest', error: null, result: { networkhashps: 0 }},
       { id: 'nocktest', error: null, result: { chain: 'main', difficulty: 0 }},
       { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
@@ -228,13 +228,13 @@ describe('Test pool functionality', () => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       nock('http://127.0.0.1:8332')
         .post('/').reply(200, JSON.stringify([
-          { id: 'nocktest', error: null, result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+          { id: 'nocktest', error: null, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
           { id: 'nocktest', error: null, result: { networkhashps: 0 }},
           { id: 'nocktest', error: null, result: { chain: 'main', difficulty: 0 }},
           { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
         ]));
       pool.setupSettings(() => {
-        expect(configCopy.primary.address).toBe('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq');
+        expect(configCopy.primary.address).toBe('ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry');
         expect(pool.settings.testnet).toBe(false);
         expect(typeof pool.statistics).toBe('object');
         done();
@@ -247,7 +247,7 @@ describe('Test pool functionality', () => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       nock('http://127.0.0.1:8332')
         .post('/').reply(200, JSON.stringify([
-          { id: 'nocktest', error: true, result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+          { id: 'nocktest', error: true, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
           { id: 'nocktest', error: null, result: { networkhashps: 0 }},
           { id: 'nocktest', error: null, result: { chain: 'main', difficulty: 0 }},
           { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
@@ -266,7 +266,7 @@ describe('Test pool functionality', () => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       nock('http://127.0.0.1:8332')
         .post('/').reply(200, JSON.stringify([
-          { id: 'nocktest', error: null, result: { isvalid: false, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+          { id: 'nocktest', error: null, result: { isvalid: false, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
           { id: 'nocktest', error: null, result: { networkhashps: 0 }},
           { id: 'nocktest', error: null, result: { chain: 'main', difficulty: 0 }},
           { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
@@ -285,15 +285,15 @@ describe('Test pool functionality', () => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       nock('http://127.0.0.1:8332')
         .post('/').reply(200, JSON.stringify([
-          { id: 'nocktest', error: null, result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+          { id: 'nocktest', error: null, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
           { id: 'nocktest', error: null, result: { networkhashps: 0 }},
           { id: 'nocktest', error: null, result: { chain: 'main', difficulty: { 'proof-of-work': 8, 'proof-of-stake': 10 }}},
           { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
         ]));
       pool.setupSettings(() => {
-        expect(configCopy.primary.address).toBe('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq');
+        expect(configCopy.primary.address).toBe('ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry');
         expect(pool.settings.testnet).toBe(false);
-        expect(pool.statistics.difficulty).toBe(8);
+        expect(pool.statistics.difficulty).toBe(524288);
         done();
       });
     });
@@ -304,15 +304,15 @@ describe('Test pool functionality', () => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       nock('http://127.0.0.1:8332')
         .post('/').reply(200, JSON.stringify([
-          { id: 'nocktest', error: null, result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }},
+          { id: 'nocktest', error: null, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
           { id: 'nocktest', error: null, result: { networkhashps: 0 }},
           { id: 'nocktest', error: null, result: { chain: 'test', difficulty: { 'proof-of-work': 8, 'proof-of-stake': 10 }}},
           { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
         ]));
       pool.setupSettings(() => {
-        expect(configCopy.primary.address).toBe('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq');
+        expect(configCopy.primary.address).toBe('ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry');
         expect(pool.settings.testnet).toBe(true);
-        expect(pool.statistics.difficulty).toBe(8);
+        expect(pool.statistics.difficulty).toBe(524288);
         done();
       });
     });
@@ -350,8 +350,8 @@ describe('Test pool functionality', () => {
       mockSetupSettings(pool, () => {
         pool.setupManager();
         expect(typeof pool.manager).toBe('object');
-        expect(typeof pool.manager.handleCurrentJob).toBe('function');
-        expect(pool.manager._eventsCount).toBe(3);
+        expect(typeof pool.manager.handleTemplate).toBe('function');
+        expect(pool.manager._eventsCount).toBe(2);
         done();
       });
     });
@@ -380,28 +380,6 @@ describe('Test pool functionality', () => {
   });
 
   test('Test pool manager setup [4]', (done) => {
-    mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
-      const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
-      mockSetupSettings(pool, () => {
-        pool.setupManager();
-        pool.network = { broadcastMiningJobs: () => done() };
-        pool.manager.emit('manager.block.updated', rpcDataCopy);
-      });
-    });
-  });
-
-  test('Test pool manager setup [5]', (done) => {
-    mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
-      const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
-      mockSetupSettings(pool, () => {
-        pool.setupManager();
-        pool.manager.emit('manager.block.updated', rpcDataCopy);
-        done();
-      });
-    });
-  });
-
-  test('Test pool manager setup [6]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       pool.on('pool.log', (type, text) => {
@@ -461,7 +439,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [7]', (done) => {
+  test('Test pool manager setup [5]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       pool.on('pool.log', (type, text) => {
@@ -521,7 +499,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [8]', (done) => {
+  test('Test pool manager setup [6]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const response = [];
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
@@ -529,7 +507,7 @@ describe('Test pool functionality', () => {
         response.push([type, text]);
         if (response.length === 2) {
           expect(response[0][0]).toBe('special');
-          expect(response[0][1]).toBe('Submitted a primary block successfully to Bitcoin\'s daemon instance(s)');
+          expect(response[0][1]).toBe('Submitted a primary block (Litecoin:1) successfully to Litecoin\'s daemon instance(s)');
           expect(response[1][0]).toBe('error');
           expect(response[1][1]).toBe('The block was rejected by the network');
           done();
@@ -603,7 +581,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [9]', (done) => {
+  test('Test pool manager setup [7]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const response = [];
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
@@ -611,7 +589,7 @@ describe('Test pool functionality', () => {
         response.push([type, text]);
         if (response.length === 2) {
           expect(response[0][0]).toBe('special');
-          expect(response[0][1]).toBe('Submitted a primary block successfully to Bitcoin\'s daemon instance(s)');
+          expect(response[0][1]).toBe('Submitted a primary block (Litecoin:1) successfully to Litecoin\'s daemon instance(s)');
           expect(response[1][0]).toBe('special');
           expect(response[1][1]).toBe('Block notification via RPC after primary block submission');
           done();
@@ -689,7 +667,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [10]', (done) => {
+  test('Test pool manager setup [8]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const response = [];
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
@@ -697,7 +675,7 @@ describe('Test pool functionality', () => {
         response.push([type, text]);
         if (response.length === 2) {
           expect(response[0][0]).toBe('special');
-          expect(response[0][1]).toBe('Submitted a primary block successfully to Bitcoin\'s daemon instance(s)');
+          expect(response[0][1]).toBe('Submitted a primary block (Litecoin:1) successfully to Litecoin\'s daemon instance(s)');
           expect(response[1][0]).toBe('error');
           expect(response[1][1]).toBe('RPC error with primary daemon instance (127.0.0.1) when requesting a primary template update: true');
           done();
@@ -775,7 +753,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [13]', (done) => {
+  test('Test pool manager setup [9]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       pool.on('pool.log', (type, text) => {
@@ -837,7 +815,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [14]', (done) => {
+  test('Test pool manager setup [10]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       pool.on('pool.log', (type, text) => {
@@ -872,7 +850,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool manager setup [15]', (done) => {
+  test('Test pool manager setup [11]', (done) => {
     mockSetupDaemons(primary, auxiliary, (primarySetup, auxiliarySetup) => {
       const pool = new Pool(configCopy, configMainCopy, primarySetup, auxiliarySetup, () => {});
       pool.on('pool.log', (type, text) => {
@@ -1150,7 +1128,7 @@ describe('Test pool functionality', () => {
           expect(response[0][0]).toBe('warning');
           expect(response[0][1]).toBe('Network difficulty (0) is lower than the difficulty on port 3002 (32)');
           expect(response[1][0]).toBe('log');
-          expect(response[1][1]).toBe('Primary chain (Bitcoin) notification via RPC polling at height 2');
+          expect(response[1][1]).toBe('Requested template from primary chain (Litecoin:2) via RPC polling');
           done();
         }
       });
@@ -1188,9 +1166,9 @@ describe('Test pool functionality', () => {
           expect(response[0][0]).toBe('warning');
           expect(response[0][1]).toBe('Network difficulty (0) is lower than the difficulty on port 3002 (32)');
           expect(response[1][0]).toBe('log');
-          expect(response[1][1]).toBe('Primary chain (Bitcoin) notification via RPC polling at height 1');
+          expect(response[1][1]).toBe('Requested template from primary chain (Litecoin:1) via RPC polling');
           expect(response[2][0]).toBe('log');
-          expect(response[2][1]).toBe('Auxiliary chain (Namecoin) notification via RPC polling at height 2');
+          expect(response[2][1]).toBe('Requested template from auxiliary chain (Namecoin:2) via RPC polling');
           done();
         }
       });
@@ -1284,9 +1262,9 @@ describe('Test pool functionality', () => {
           expect(response[0][0]).toBe('warning');
           expect(response[0][1]).toBe('Network difficulty (0) is lower than the difficulty on port 3002 (32)');
           expect(response[1][0]).toBe('log');
-          expect(response[1][1]).toBe('Primary chain (Bitcoin) notification via RPC polling at height 1');
+          expect(response[1][1]).toBe('Requested template from primary chain (Litecoin:1) via RPC polling');
           expect(response[2][0]).toBe('log');
-          expect(response[2][1]).toBe('Auxiliary chain (Namecoin) notification via RPC polling at height 2');
+          expect(response[2][1]).toBe('Requested template from auxiliary chain (Namecoin:2) via RPC polling');
           done();
         }
       });
@@ -1543,7 +1521,7 @@ describe('Test pool functionality', () => {
           expect(response[0][0]).toBe('warning');
           expect(response[0][1]).toBe('Network difficulty (0) is lower than the difficulty on port 3002 (32)');
           expect(response[1][0]).toBe('warning');
-          expect(response[1][1]).toBe('A client (client [example]) sent a malformed message to the server: "test"');
+          expect(response[1][1]).toBe('A client (client [example]) sent a malformed message to the server: test');
           pool.network.stopNetwork();
         }
       });
@@ -1990,9 +1968,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkWorker(primarySetup, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', (valid) => {
+      pool.checkWorker(primarySetup, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', (valid) => {
         expect(valid).toBe(true);
         done();
       });
@@ -2007,9 +1985,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkWorker(primarySetup, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq.worker1', (valid) => {
+      pool.checkWorker(primarySetup, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry.worker1', (valid) => {
         expect(valid).toBe(true);
         done();
       });
@@ -2024,9 +2002,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkPrimaryWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', (valid) => {
+      pool.checkPrimaryWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', (valid) => {
         expect(valid).toBe(true);
         done();
       });
@@ -2041,9 +2019,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: false, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: false, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkPrimaryWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', () => {}, (result) => {
+      pool.checkPrimaryWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', () => {}, (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': false, 'disconnect': false });
         done();
       });
@@ -2060,7 +2038,7 @@ describe('Test pool functionality', () => {
           error: true,
           result: null
         }));
-      pool.checkPrimaryWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', () => {}, (result) => {
+      pool.checkPrimaryWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', () => {}, (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': false, 'disconnect': false });
         done();
       });
@@ -2076,9 +2054,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkAuxiliaryWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', (valid) => {
+      pool.checkAuxiliaryWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', (valid) => {
         expect(valid).toBe(true);
         done();
       });
@@ -2094,9 +2072,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: false, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: false, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.checkAuxiliaryWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', () => {}, (result) => {
+      pool.checkAuxiliaryWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', () => {}, (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': false, 'disconnect': false });
         done();
       });
@@ -2132,9 +2110,9 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.authorizeWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', null, 'test', (result) => {
+      pool.authorizeWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', null, 'test', (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': true, 'disconnect': false });
         done();
       });
@@ -2150,16 +2128,16 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
       nock('http://127.0.0.1:8336')
         .post('/', body => body.method === 'validateaddress')
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
-      pool.authorizeWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', 'test', (result) => {
+      pool.authorizeWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', 'test', (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': true, 'disconnect': false });
         done();
       });
@@ -2175,7 +2153,7 @@ describe('Test pool functionality', () => {
         .reply(200, JSON.stringify({
           id: 'nocktest',
           error: null,
-          result: { isvalid: true, address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' }
+          result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }
         }));
       nock('http://127.0.0.1:8336')
         .post('/', body => body.method === 'validateaddress')
@@ -2184,7 +2162,7 @@ describe('Test pool functionality', () => {
           error: true,
           result: null
         }));
-      pool.authorizeWorker('0.0.0.0', 3001, 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', 'test', (result) => {
+      pool.authorizeWorker('0.0.0.0', 3001, 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', 'test', (result) => {
         expect(result).toStrictEqual({ 'error': null, 'authorized': false, 'disconnect': false });
         done();
       });

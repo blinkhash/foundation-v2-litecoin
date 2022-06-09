@@ -1,10 +1,10 @@
 const Manager = require('../main/manager');
 const MockDate = require('mockdate');
-const config = require('../../configs/bitcoin');
+const config = require('../../configs/example');
 const configMain = require('../../configs/main');
 const testdata = require('../../daemon/test/daemon.mock');
 
-config.primary.address = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+config.primary.address = 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry';
 config.primary.recipients = [];
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,15 +24,6 @@ describe('Test manager functionality', () => {
     expect(manager.extraNonceCounter.next().length).toBe(8);
     expect(manager.extraNoncePlaceholder).toStrictEqual(Buffer.from('f000000ff111111f', 'hex'));
     expect(manager.extraNonce2Size).toBe(4);
-  });
-
-  test('Test job updates given new blockTemplate', () => {
-    const manager = new Manager(configCopy, configMainCopy);
-    manager.handleCurrentJob(rpcDataCopy);
-    expect(typeof manager.currentJob).toBe('object');
-    expect(manager.currentJob.rpcData.height).toBe(1);
-    expect(manager.currentJob.rpcData.previousblockhash).toBe('9719aefb83ef6583bd4c808bbe7d49b629a60b375fc6e36bee039530bc7727e2');
-    expect(typeof manager.validJobs[1]).toBe('object');
   });
 
   test('Test template updates given new blockTemplate [1]', () => {
@@ -190,23 +181,6 @@ describe('Test manager functionality', () => {
       extraNonce2: '00000000'.toString('hex'),
       nTime: '6036c54f'.toString('hex'),
       nonce: 'fe1a0000'.toString('hex'),
-      versionBit: '20000000',
-      versionMask: '1fffe000',
-      asicboost: true,
-    };
-    const response = manager.handleShare(1, 0.0000001, 0.0000001, 'ip_addr', 'port', 'addr1', 'addr2', submission);
-    expect(response.error[0]).toBe(20);
-    expect(response.error[1]).toBe('invalid version bit');
-  });
-
-  test('Test share submission process [9]', () => {
-    const manager = new Manager(configCopy, configMainCopy);
-    manager.handleTemplate(rpcDataCopy, false);
-    const submission = {
-      extraNonce1: '00000001'.toString('hex'),
-      extraNonce2: '00000000'.toString('hex'),
-      nTime: '6036c54f'.toString('hex'),
-      nonce: 'fe1a0000'.toString('hex'),
       versionBit: '00000000',
       versionMask: '1fffe000',
       asicboost: true,
@@ -216,7 +190,7 @@ describe('Test manager functionality', () => {
     expect(response.error[1].slice(0, 23)).toBe('low difficulty share of');
   });
 
-  test('Test share submission process [10]', () => {
+  test('Test share submission process [9]', () => {
     const manager = new Manager(configCopy, configMainCopy);
     manager.handleTemplate(rpcDataCopy, false);
     const submission = {

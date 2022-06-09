@@ -1,5 +1,5 @@
 const Client = require('../main/client');
-const config = require('../../configs/bitcoin')
+const config = require('../../configs/example')
 const events = require('events');
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -246,28 +246,20 @@ describe('Test client functionality', () => {
     const socket = mockSocket();
     const client = new Client(configCopy, socket, 0, () => {});
     client.socket.on('log', (text) => {
-      expect(text).toStrictEqual('{"id":null,"result":{"version-rolling":true,"version-rolling.mask":"1fffe000"},"error":null}\n');
+      expect(text).toStrictEqual('{"id":null,"result":{"version-rolling":false},"error":null}\n');
       done();
     });
     client.validateMessages({ id: null, method: 'mining.configure' });
-    expect(client.asicboost).toBe(true);
-    expect(client.versionMask).toBe('1fffe000');
+    expect(client.asicboost).toBe(false);
+    expect(client.versionMask).toBe('00000000');
   });
 
   test('Test client message validation [7]', () => {
     const socket = mockSocket();
     const client = new Client(configCopy, socket, 0, () => {});
-    client.validateMessages({ id: null, method: 'mining.multi_version', params: [1] });
+    client.validateMessages({ id: null, method: 'mining.multi_version', params: [4] });
     expect(client.asicboost).toBe(false);
     expect(client.versionMask).toBe('00000000');
-  });
-
-  test('Test client message validation [8]', () => {
-    const socket = mockSocket();
-    const client = new Client(configCopy, socket, 0, () => {});
-    client.validateMessages({ id: null, method: 'mining.multi_version', params: [4] });
-    expect(client.asicboost).toBe(true);
-    expect(client.versionMask).toBe('1fffe000');
   });
 
   test('Test client message validation [9]', (done) => {

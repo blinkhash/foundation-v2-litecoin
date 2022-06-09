@@ -1,7 +1,5 @@
 const Algorithms = require('./algorithms');
 const Transactions = require('./transactions');
-const merkleTree = require('merkle-lib');
-const merkleProof = require('merkle-lib/proof');
 const utils = require('./utils');
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,21 +15,10 @@ const Template = function(jobId, config, rpcData, placeholder) {
 
   // Template Variables
   this.target = _this.rpcData.target ? BigInt(`0x${ _this.rpcData.target }`) : utils.bigIntFromBitsHex(_this.rpcData.bits);
-  this.difficulty = parseFloat((Algorithms.sha256d.diff / Number(_this.target)).toFixed(9));
+  this.difficulty = parseFloat((Algorithms.scrypt.diff / Number(_this.target)).toFixed(9));
   this.previous = utils.reverseByteOrder(Buffer.from(_this.rpcData.previousblockhash, 'hex')).toString('hex');
   this.generation = new Transactions(config).handleGeneration(rpcData, placeholder);
-
-  // Calculate Merkle Branches
-  this.handleMerkle = function(transactions) {
-
-    // Build Merkle Tree
-    const hashes = utils.convertHashToBuffer(transactions);
-    const merkleData = [Buffer.from([], 'hex')].concat(hashes);
-    const merkleTreeFull = merkleTree(merkleData, utils.sha256d);
-
-    // Return Relevant Merkle Branches
-    return merkleProof(merkleTreeFull, merkleData[0]).slice(1, -1).filter(node => node !== null);
-  }
+  this.steps = utils.getMerkleSteps(_this.rpcData.transactions);
 
   // Manage Serializing Block Headers
   this.handleHeader = function(version, merkleRoot, nTime, nonce) {
@@ -68,6 +55,10 @@ const Template = function(jobId, config, rpcData, placeholder) {
       utils.varIntBuffer(_this.rpcData.transactions.length + 1),
       coinbase,
       Buffer.concat(_this.rpcData.transactions.map((tx) => Buffer.from(tx.data, 'hex'))),
+      Buffer.concat(_this.rpcData.mweb ? [
+        Buffer.from([1]),
+        Buffer.from(_this.rpcData.mweb, 'hex')
+      ] : []),
     ]);
   };
 
@@ -78,7 +69,7 @@ const Template = function(jobId, config, rpcData, placeholder) {
       _this.previous,
       _this.generation[0].toString('hex'),
       _this.generation[1].toString('hex'),
-      _this.handleMerkle(_this.rpcData.transactions).map((step) => step.toString('hex')),
+      _this.steps.map((step) => step.toString('hex')),
       utils.packInt32BE(_this.rpcData.version).toString('hex'),
       _this.rpcData.bits,
       utils.packUInt32BE(_this.rpcData.curtime).toString('hex'),

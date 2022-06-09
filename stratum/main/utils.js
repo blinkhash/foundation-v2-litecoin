@@ -3,6 +3,8 @@ const bchaddr = require('bchaddrjs');
 const bech32 = require('bech32');
 const bs58check = require('bs58check');
 const crypto = require('crypto');
+const merkleTree = require('merkle-lib');
+const merkleProof = require('merkle-lib/proof');
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -242,6 +244,14 @@ exports.getMinimalOPCodes = function(buffer) {
   }
   if (buffer[0] === 0x81) return exports.getBitcoinOPCodes('OP_1NEGATE');
 };
+
+// Calculate Merkle Steps for Transactions
+exports.getMerkleSteps = function(transactions) {
+  const hashes = exports.convertHashToBuffer(transactions);
+  const merkleData = [Buffer.from([], 'hex')].concat(hashes);
+  const merkleTreeFull = merkleTree(merkleData, exports.sha256d);
+  return merkleProof(merkleTreeFull, merkleData[0]).slice(1, -1).filter(node => node !== null);
+}
 
 // Calculate Equihash Solution Length
 exports.getSolutionLength = function(nParam, kParam) {

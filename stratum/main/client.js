@@ -285,31 +285,22 @@ const Client = function(config, socket, id, authorizeFn) {
     _this.sendJson({
       id: message.id,
       result: {
-        'version-rolling': true,
-        'version-rolling.mask': '1fffe000'
+        'version-rolling': false
       },
       error: null
     });
 
     // Update Version Mask
-    _this.asicboost = true;
-    _this.versionMask = '1fffe000';
+    _this.asicboost = false;
+    _this.versionMask = '00000000';
   };
 
   // Manage Stratum Multi-Versions
   this.handleMultiVersion = function(message) {
 
-    // Parse Version of Coin
-    const mVersion = parseInt(message.params[0]);
-
-    // Check if AsicBoost is Supported
-    if (mVersion > 1) {
-      _this.asicboost = true;
-      _this.versionMask = '1fffe000';
-    } else {
-      _this.asicboost = false;
-      _this.versionMask = '00000000';
-    }
+    // AsicBoost is Not Supported
+    _this.asicboost = false;
+    _this.versionMask = '00000000';
   };
 
   // Manage Stratum Submission

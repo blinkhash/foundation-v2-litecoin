@@ -68,14 +68,18 @@ const Loader = function(logger, configMain) {
   this.handleConfigs = function() {
     let config = null;
     const normalizedPath = path.join(__dirname, '../../configs/');
-    if (fs.existsSync(normalizedPath + 'bitcoin.js')) {
-      config = require(normalizedPath + 'bitcoin.js');
+    if (fs.existsSync(normalizedPath + 'litecoin.js')) {
+      config = require(normalizedPath + 'litecoin.js');
 
       // Validate Individual Configuration Files
       if (!config.enabled) return;
       if (!_this.checkPoolDaemons(config)) return;
       if (!_this.checkPoolPorts(config)) return;
       if (!_this.checkPoolRecipients(config)) return;
+
+    // No Configuration Created
+    } else {
+      throw new Error('Unable to find litecoin.js file. Read the installation/setup instructions')
     }
 
     // Return Validated Configuration

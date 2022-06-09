@@ -51,7 +51,11 @@ const Stratum = function (logger, config, configMain) {
     });
 
     // Handle Stratum Share Events
-    _this.stratum.on('pool.share', (shareData, shareType, blockValid, callback) => {});
+    _this.stratum.on('pool.share', (shareData, shareType, blockValid, callback) => {
+      const address = shareData.addrPrimary.split('.')[0];
+      const text = _this.text.stratumSharesText1(shareData.difficulty, shareData.shareDiff, address, shareData.ip);
+      _this.logger["log"]("Pool", _this.config.name, [text]);
+    });
   };
 
   // Output Stratum Data on Startup
@@ -59,13 +63,13 @@ const Stratum = function (logger, config, configMain) {
 
     // Build Pool Starting Message
     const output = [
-      _this.text.startingMessageText1(_this.config.name),
-      _this.text.startingMessageText2(_this.config.coins),
+      _this.text.startingMessageText1(`Pool-${ _this.config.primary.coin.name }`),
+      _this.text.startingMessageText2(`[${_this.config.primary.coin.name }]`),
       _this.text.startingMessageText3(_this.config.settings.testnet ? 'Testnet' : 'Mainnet'),
       _this.text.startingMessageText4(_this.stratum.statistics.ports.join(', ')),
       _this.text.startingMessageText5(_this.stratum.statistics.feePercentage * 100),
       _this.text.startingMessageText6(_this.stratum.manager.currentJob.rpcData.height),
-      _this.text.startingMessageText7(_this.stratum.manager.currentJob.difficulty * Algorithms.sha256d.multiplier),
+      _this.text.startingMessageText7(_this.stratum.manager.currentJob.difficulty * Algorithms.scrypt.multiplier),
       _this.text.startingMessageText8(_this.stratum.statistics.difficulty),
       _this.text.startingMessageText9(_this.stratum.statistics.connections),
       _this.text.startingMessageText10()];

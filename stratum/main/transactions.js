@@ -10,30 +10,30 @@ const Transactions = function(config) {
 
   // Mainnet Configuration
   this.configMainnet = {
-    bech32: 'bc',
+    bech32: 'ltc',
     bip32: {
       public: Buffer.from('0488B21E', 'hex').readUInt32LE(0),
       private: Buffer.from('0488ADE4', 'hex').readUInt32LE(0),
     },
-    peerMagic: 'f9beb4d9',
-    pubKeyHash: Buffer.from('00', 'hex').readUInt8(0),
-    scriptHash: Buffer.from('05', 'hex').readUInt8(0),
-    wif: Buffer.from('80', 'hex').readUInt8(0),
-    coin: 'btc',
+    peerMagic: 'fbc0b6db',
+    pubKeyHash: Buffer.from('30', 'hex').readUInt8(0),
+    scriptHash: Buffer.from('32', 'hex').readUInt8(0),
+    wif: Buffer.from('b0', 'hex').readUInt8(0),
+    coin: 'ltc',
   }
 
   // Testnet Configuration
   this.configTestnet = {
-    bech32: 'tb',
+    bech32: 'tltc',
     bip32: {
       public: Buffer.from('043587CF', 'hex').readUInt32LE(0),
       private: Buffer.from('04358394', 'hex').readUInt32LE(0),
     },
-    peerMagic: '0b110907',
+    peerMagic: 'fcc1b7dc',
     pubKeyHash: Buffer.from('6F', 'hex').readUInt8(0),
     scriptHash: Buffer.from('C4', 'hex').readUInt8(0),
     wif: Buffer.from('EF', 'hex').readUInt8(0),
-    coin: 'btc',
+    coin: 'ltc',
   }
 
   // Calculate Generation Transaction
@@ -45,7 +45,7 @@ const Transactions = function(config) {
     const txInPrevOutIndex = Math.pow(2, 32) - 1;
     const txOutputBuffers = [];
 
-    let txVersion = 4;
+    let txVersion = 1;
     const network = !_this.config.settings.testnet ?
       _this.configMainnet :
       _this.configTestnet;
@@ -77,7 +77,7 @@ const Transactions = function(config) {
       scriptSig = Buffer.concat([
         scriptSig,
         Buffer.from(_this.config.auxiliary.coin.header, 'hex'),
-        utils.reverseBuffer(Buffer.from(rpcData.auxData.hash, 'hex')),
+        Buffer.from(rpcData.auxData.hash, 'hex'),
         utils.packUInt32LE(1),
         utils.packUInt32LE(0)
       ]);
@@ -90,7 +90,7 @@ const Transactions = function(config) {
       utils.uint256BufferFromHash(txInPrevOutHash),
       utils.packUInt32LE(txInPrevOutIndex),
       utils.varIntBuffer(scriptSig.length + placeholder.length),
-      scriptSig
+      scriptSig,
     ]);
 
     // Handle Recipient Transactions

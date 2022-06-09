@@ -40,7 +40,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   // Handle Worker Authentication
   this.authorizeWorker = function(ip, port, addrPrimary, addrAuxiliary, password, callback) {
     _this.checkPrimaryWorker(ip, port, addrPrimary, () => {
-      _this.checkAuxiliaryWorker(ip, port, addrPrimary, (authAuxiliary) => {
+      _this.checkAuxiliaryWorker(ip, port, addrAuxiliary, (authAuxiliary) => {
         _this.emitLog('log', false, _this.text.stratumWorkersText1(addrPrimary, ip, port));
         callback({ error: null, authorized: authAuxiliary, disconnect: false });
       }, callback);
@@ -97,10 +97,10 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
 
   // Check if Auxiliary Share is a Valid Block Candidate
   this.checkAuxiliary = function(shareData) {
-    const shareMultiplier = Algorithms.sha256d.multiplier;
-    const shareDiff = Algorithms.sha256d.diff / Number(_this.auxiliary.rpcData.target);
+    const shareMultiplier = Algorithms.scrypt.multiplier;
+    const shareDiff = Algorithms.scrypt.diff / Number(_this.auxiliary.rpcData.target);
     shareData.blockDiffAuxiliary = shareDiff * shareMultiplier;
-    return _this.auxiliary.rpcData.target < shareData.headerDiff;
+    return _this.auxiliary.rpcData.target >= shareData.headerDiff;
   }
 
   // Check Percentage of Blockchain Downloaded
@@ -131,7 +131,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
     _this.submitPrimary(shareData.hex, (error, response) => {
       if (error) _this.emitLog('error', false, response);
       else {
-        _this.emitLog('special', false, _this.text.stratumBlocksText4(_this.config.primary.coin.name));
+        _this.emitLog('special', false, _this.text.stratumBlocksText4(_this.config.primary.coin.name, shareData.height));
         _this.checkAccepted(_this.primary.daemon, shareData.hash, (accepted, transaction) => {
           shareData.transaction = transaction;
           callback(accepted, shareData);
@@ -144,7 +144,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   this.handlePrimaryTemplate = function(newBlock, callback) {
 
     // Build Daemon Commands
-    const rules = ['segwit'];
+    const rules = ['mweb', 'segwit'];
     const capabilities = ['coinbasetxn', 'workid', 'coinbase/append'];
     const commands = [['getblocktemplate', [{ 'capabilities': capabilities, 'rules': rules }]]];
 
@@ -199,7 +199,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
     _this.submitAuxiliary(shareData, hexData, (error, response) => {
       if (error) _this.emitLog('error', false, response);
       else {
-        _this.emitLog('special', false, _this.text.stratumBlocksText7(_this.config.auxiliary.coin.name));
+        _this.emitLog('special', false, _this.text.stratumBlocksText7(_this.config.auxiliary.coin.name, _this.auxiliary.rpcData.height));
         _this.checkAccepted(_this.auxiliary.daemon, _this.auxiliary.rpcData.hash, (accepted, transaction) => {
           shareData.transaction = transaction;
           shareData.height = _this.auxiliary.rpcData.height;
@@ -239,10 +239,17 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   // Submit Auxiliary Block to Blockchain
   this.submitAuxiliary = function(shareData, hexData, callback) {
 
+    // Build Coinbase Proof from Current Job Data
+    const coinbaseProof = Buffer.concat([
+      utils.varIntBuffer(_this.manager.currentJob.steps.length),
+      Buffer.concat(_this.manager.currentJob.steps),
+      utils.packInt32LE(0)
+    ]);
+
     // Build Daemon Commands
     const auxProof = Buffer.concat([utils.varIntBuffer(0), utils.packInt32LE(0)]);
-    const auxPow = Buffer.concat([ shareData.coinbase, shareData.header, auxProof, auxProof, hexData ]);
-    const commands = ['getauxblock', [_this.auxiliary.rpcData.hash, auxPow.toString('hex')]];
+    const auxPow = Buffer.concat([ shareData.coinbase, shareData.header, coinbaseProof, auxProof, hexData ]);
+    const commands = [['getauxblock', [_this.auxiliary.rpcData.hash, auxPow.toString('hex')]]];
 
     // Submit Block to Daemon
     _this.auxiliary.daemon.sendCommands(commands, false, (results) => {
@@ -317,7 +324,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
       // Initialize Statistics/Settings
       _this.settings.testnet = (resultData.getblockchaininfo.chain === 'test') ? true : false;
       _this.statistics.connections = resultData.getnetworkinfo.connections;
-      _this.statistics.difficulty = difficulty * Algorithms.sha256d.multiplier;
+      _this.statistics.difficulty = difficulty * Algorithms.scrypt.multiplier;
       _this.config.settings.testnet = _this.settings.testnet;
 
       callback();
@@ -344,7 +351,12 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
 
     // Establish Job Manager Instance
     _this.manager = new Manager(_this.config, _this.configMain);
-     _this.manager.on('manager.share', (shareData, auxShareData, blockValid) => {
+    _this.manager.on('manager.block.new', (template) => {
+      if (_this.network) _this.network.broadcastMiningJobs(template, true);
+    });
+
+    // Handle Shares on Submission
+    _this.manager.on('manager.share', (shareData, auxShareData, blockValid) => {
 
       // Calculate Status of Submitted Share
       let shareType = 'valid';
@@ -366,26 +378,17 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
 
       // Process Auxiliary Submission
       if (shareType === 'valid' && _this.auxiliary.enabled) {
-        const auxBlockValid = _this.checkAuxiliary(auxShareData);
-        _this.handleAuxiliary(auxShareData, auxBlockValid, (accepted, outputData) => {
-          _this.emit('pool.share', outputData, shareType, accepted);
-          _this.handleAuxiliaryTemplate(true, (error, result, newBlock) => {
-            if (newBlock && auxBlockValid) {
-              _this.emitLog('special', false, _this.text.stratumManagerText2());
-            }
+        if (_this.checkAuxiliary(auxShareData)) {
+          _this.handleAuxiliary(auxShareData, true, (accepted, outputData) => {
+            _this.emit('pool.share', outputData, shareType, accepted);
+            _this.handlePrimaryTemplate(true, (error, result, newBlock) => {
+              if (newBlock && auxBlockValid) {
+                _this.emitLog('special', false, _this.text.stratumManagerText2());
+              }
+            });
           });
-        });
+        }
       }
-    });
-
-    // Handle New Block Data
-    _this.manager.on('manager.block.new', (template) => {
-      if (_this.network) _this.network.broadcastMiningJobs(template, true);
-    });
-
-    // Handle Updated Block Data
-    _this.manager.on('manager.block.updated', (template) => {
-      if (_this.network) _this.network.broadcastMiningJobs(template, false);
     });
   };
 
@@ -393,7 +396,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   this.setupPrimaryBlockchain = function(callback) {
 
     // Build Daemon Commands
-    const rules = ['segwit'];
+    const rules = ['mweb', 'segwit'];
     const capabilities = ['coinbasetxn', 'workid', 'coinbase/append'];
     const commands = [['getblocktemplate', [{ 'capabilities': capabilities, 'rules': rules }]]];
 
@@ -492,7 +495,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
 
     // Handle Client Socket Events
     client.on('client.socket.malformed', (message) => {
-      _this.emitLog('warning', false, _this.text.stratumClientText3(client.sendLabel(), JSON.stringify(message)));
+      _this.emitLog('warning', false, _this.text.stratumClientText3(client.sendLabel(), message));
     });
     client.on('client.socket.flooded', () => {
       _this.emitLog('warning', false, _this.text.stratumClientText4(client.sendLabel()));
@@ -536,7 +539,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
       else client.broadcastDifficulty(8);
 
       // Send Mining Job Parameters to Miner
-      const jobParams = _this.manager.currentJob.handleParameters(client, true);
+      const jobParams = _this.manager.currentJob.handleParameters(true);
       client.broadcastMiningJob(jobParams);
     });
 
@@ -549,9 +552,6 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
         extraNonce2: message.params[2],
         nTime: message.params[3],
         nonce: message.params[4],
-        versionBit: message.params[5],
-        versionMask: client.versionMask,
-        asicboost: client.asicboost,
       };
 
       // Submit Share to Job Manager
@@ -559,7 +559,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
         message.params[1],
         client.previousDifficulty,
         client.difficulty,
-        client.remoteAddress,
+        client.socket.remoteAddress,
         client.socket.localPort,
         client.addrPrimary,
         client.addrAuxiliary,

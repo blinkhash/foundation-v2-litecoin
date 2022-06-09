@@ -34,40 +34,8 @@ exports.getBlockTemplate = function() {
     'curtime': 1614201893,
     'bits': '1e0ffff0',
     'height': 1,
-    'default_witness_commitment': '6a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9'
-  };
-};
-
-// Mock Daemon GetBlockTemplate Data (Kawpow)
-exports.getBlockTemplateKawpow = function() {
-  return {
-    'capabilities': [ 'proposal' ],
-    'version': 805306368,
-    'rules': [
-      'assets',
-      'messaging_restricted',
-      'transfer_script',
-      'enforce_value',
-      'coinbase'
-    ],
-    'vbavailable': {},
-    'vbrequired': 0,
-    'previousblockhash': '0000000427a793d87387a1b733ba46fe2bc07983d607651dd21f3c771810a9ff',
-    'transactions': [],
-    'coinbaseaux': { 'flags': '' },
-    'coinbasevalue': 500000000000,
-    'longpollid': '0000000427a793d87387a1b733ba46fe2bc07983d607651dd21f3c771810a9ff835',
-    'target': '00000004f5540000000000000000000000000000000000000000000000000000',
-    'mintime': 1634741701,
-    'mutable': [ 'time', 'transactions', 'prevblock' ],
-    'noncerange': '00000000ffffffff',
-    'sigoplimit': 80000,
-    'sizelimit': 8000000,
-    'weightlimit': 8000000,
-    'curtime': 1634742080,
-    'bits': '1d04f554',
-    'height': 940250,
-    'default_witness_commitment': '6a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9'
+    'default_witness_commitment': '6a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9',
+    'mweb': '808fe9194db5a2d357d731b56aaf099553c7a3d4c88739e859876a60827fc9057c6f8254000000000000000000000000000000000000000000000000000000000000000096a703ee6d9d57e2d0b2766b1e534412fbdcc28ceb658f66dbe709af11b098a23aee8f32c489b3e9ae2ea8c7183db8f9cde5cce9bb954224956affce8858e0c100000000000000000000000000000000000000000000000000000000000000009b2700000000'
   };
 };
 
