@@ -1,5 +1,5 @@
 const Client = require('../main/client');
-const config = require('../../configs/example')
+const config = require('../../configs/example');
 const events = require('events');
 
 ////////////////////////////////////////////////////////////////////////////////

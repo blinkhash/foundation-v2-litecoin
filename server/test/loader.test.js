@@ -31,7 +31,7 @@ describe('Test loader functionality', () => {
   test('Test loader daemon validation [2]', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const loader = new Loader(logger, configMainCopy);
-    const config = { primary: { daemons: ["test"] }, auxiliary: { enabled: true, daemons: [] }};
+    const config = { primary: { daemons: ['test'] }, auxiliary: { enabled: true, daemons: [] }};
     const response = loader.checkPoolDaemons(config);
     expect(response).toBe(false);
     expect(consoleSpy).toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('Test loader functionality', () => {
   test('Test loader daemon validation [3]', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const loader = new Loader(logger, configMainCopy);
-    const config = { primary: { daemons: ["test"] }, auxiliary: { enabled: true, daemons: ["test"] }};
+    const config = { primary: { daemons: ['test'] }, auxiliary: { enabled: true, daemons: ['test'] }};
     const response = loader.checkPoolDaemons(config);
     expect(response).toBe(true);
     expect(consoleSpy).not.toHaveBeenCalled();
@@ -51,7 +51,7 @@ describe('Test loader functionality', () => {
   test('Test loader daemon validation [4]', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const loader = new Loader(logger, configMainCopy);
-    const config = { primary: { daemons: ["test"] }};
+    const config = { primary: { daemons: ['test'] }};
     const response = loader.checkPoolDaemons(config);
     expect(response).toBe(true);
     expect(consoleSpy).not.toHaveBeenCalled();

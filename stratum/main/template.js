@@ -86,6 +86,6 @@ const Template = function(jobId, config, rpcData, placeholder) {
     }
     return false;
   };
-}
+};
 
 module.exports = Template;

@@ -153,7 +153,7 @@ describe('Test pool functionality', () => {
   let primary, auxiliary;
   let primaryDaemonsCopy, auxiliaryDaemonsCopy;
   let configCopy, configMainCopy, rpcDataCopy, auxDataCopy;
-  let blockchainDataCopy, getInfoDataCopy, peerDataCopy;
+  let blockchainDataCopy, peerDataCopy;
 
   beforeEach(() => {
     configCopy = JSON.parse(JSON.stringify(config));
@@ -164,7 +164,6 @@ describe('Test pool functionality', () => {
     rpcDataCopy = JSON.parse(JSON.stringify(testdata.getBlockTemplate()));
     auxDataCopy = JSON.parse(JSON.stringify(testdata.getAuxBlock()));
     blockchainDataCopy = JSON.parse(JSON.stringify(testdata.getBlockchainInfo()));
-    getInfoDataCopy = JSON.parse(JSON.stringify(testdata.getInfo()));
     peerDataCopy = JSON.parse(JSON.stringify(testdata.getPeerInfo()));
 
     primary = new Daemon(primaryDaemonsCopy);
@@ -1491,7 +1490,7 @@ describe('Test pool functionality', () => {
         }
       });
       pool.on('client.socket.success', () => {
-        pool.difficulty[client.socket.localPort] = { clients: { 'test': ["test"] }};
+        pool.difficulty[client.socket.localPort] = { clients: { 'test': ['test'] }};
         client.emit('client.difficulty.updated', 8);
       });
       mockSetupSettings(pool, () => {

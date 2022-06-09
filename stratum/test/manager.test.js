@@ -1,5 +1,4 @@
 const Manager = require('../main/manager');
-const MockDate = require('mockdate');
 const config = require('../../configs/example');
 const configMain = require('../../configs/main');
 const testdata = require('../../daemon/test/daemon.mock');

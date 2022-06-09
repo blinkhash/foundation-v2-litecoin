@@ -47,14 +47,14 @@ const Stratum = function (logger, config, configMain) {
     // Handle Stratum Main Events
     _this.stratum.on('pool.started', () => {});
     _this.stratum.on('pool.log', (severity, text) => {
-      _this.logger[severity]("Pool", _this.config.name, [text]);
+      _this.logger[severity]('Pool', _this.config.name, [text]);
     });
 
     // Handle Stratum Share Events
-    _this.stratum.on('pool.share', (shareData, shareType, blockValid, callback) => {
+    _this.stratum.on('pool.share', (shareData) => {
       const address = shareData.addrPrimary.split('.')[0];
       const text = _this.text.stratumSharesText1(shareData.difficulty, shareData.shareDiff, address, shareData.ip);
-      _this.logger["log"]("Pool", _this.config.name, [text]);
+      _this.logger['log']('Pool', _this.config.name, [text]);
     });
   };
 
@@ -75,10 +75,10 @@ const Stratum = function (logger, config, configMain) {
       _this.text.startingMessageText10()];
 
     // Send Starting Message to Logger
-    if (_this.forkId === "0") {
-      _this.logger["log"]("Pool", null, output, true);
+    if (_this.forkId === '0') {
+      _this.logger['log']('Pool', null, output, true);
     }
-  }
+  };
 
   // Setup Pool Stratum Capabilities
   this.setupStratum = function(callback) {

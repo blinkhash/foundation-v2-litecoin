@@ -112,7 +112,7 @@ describe('Test interface functionality', () => {
       }));
     const daemon = new Interface(daemonsCopy);
     const requests = [['getblocktemplate', []]];
-    const expected = [{"data": "{\"error\":true,\"result\":null,\"instance\":\"nocktest\"}", "error": {"code": -1, "message": "Unauthorized RPC access. Invalid RPC username or password"}, "instance": {"host": "127.0.0.1", "index": 0, "password": "foundation", "port": "8332", "username": "foundation"}, "response": null}]
+    const expected = [{'data': '{"error":true,"result":null,"instance":"nocktest"}', 'error': {'code': -1, 'message': 'Unauthorized RPC access. Invalid RPC username or password'}, 'instance': {'host': '127.0.0.1', 'index': 0, 'password': 'foundation', 'port': '8332', 'username': 'foundation'}, 'response': null}];
     daemon.sendCommands(requests, false, (response) => {
       expect(response).toStrictEqual(expected);
       done();
@@ -173,7 +173,7 @@ describe('Test interface functionality', () => {
 
   test('Test interface commands [6]', (done) => {
     const daemon = new Interface(daemonsCopy);
-    const expected = {"data": null, "error": {"code": -1, "message": "No commands passed to daemon"}, "instance": null, "response": null};
+    const expected = {'data': null, 'error': {'code': -1, 'message': 'No commands passed to daemon'}, 'instance': null, 'response': null};
     daemon.sendCommands([], false, (response) => {
       expect(response).toStrictEqual(expected);
       done();
@@ -186,7 +186,7 @@ describe('Test interface functionality', () => {
       .reply(200, null);
     const daemon = new Interface(daemonsCopy);
     const requests = [['getblocktemplate', []]];
-    const expected = [{"data": "null", "error": {"code": -1, "message": "Could not parse RPC data from daemon response"}, "instance": {"host": "127.0.0.1", "index": 0, "password": "foundation", "port": "8332", "username": "foundation"}, "response": null}]
+    const expected = [{'data': 'null', 'error': {'code': -1, 'message': 'Could not parse RPC data from daemon response'}, 'instance': {'host': '127.0.0.1', 'index': 0, 'password': 'foundation', 'port': '8332', 'username': 'foundation'}, 'response': null}];
     daemon.sendCommands(requests, false, (response) => {
       expect(response).toStrictEqual(expected);
       done();
@@ -199,7 +199,7 @@ describe('Test interface functionality', () => {
       .reply(200, 'blajahahge');
     const daemon = new Interface(daemonsCopy);
     const requests = [['getblocktemplate', []]];
-    const expected =  [{"data": "blajahahge", "error": {"code": -1, "message": "Could not parse RPC data from daemon response"}, "instance": {"host": "127.0.0.1", "index": 0, "password": "foundation", "port": "8332", "username": "foundation"}, "response": null}]
+    const expected = [{'data': 'blajahahge', 'error': {'code': -1, 'message': 'Could not parse RPC data from daemon response'}, 'instance': {'host': '127.0.0.1', 'index': 0, 'password': 'foundation', 'port': '8332', 'username': 'foundation'}, 'response': null}];
     daemon.sendCommands(requests, false, (response) => {
       expect(response).toStrictEqual(expected);
       done();
@@ -209,7 +209,7 @@ describe('Test interface functionality', () => {
   test('Test interface commands [9]', (done) => {
     const daemon = new Interface(daemonsCopy);
     const requests = [['getblocktemplate', []]];
-    const expected = {"data": null, "error": {"code": -1, "message": "connect ECONNREFUSED 127.0.0.1:8332"}, "instance": {"host": "127.0.0.1", "index": 0, "password": "foundation", "port": "8332", "username": "foundation"}, "response": null}
+    const expected = {'data': null, 'error': {'code': -1, 'message': 'connect ECONNREFUSED 127.0.0.1:8332'}, 'instance': {'host': '127.0.0.1', 'index': 0, 'password': 'foundation', 'port': '8332', 'username': 'foundation'}, 'response': null};
     daemon.sendCommands(requests, true, (response) => {
       expect(response).toStrictEqual(expected);
       done();

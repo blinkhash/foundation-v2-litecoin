@@ -296,7 +296,7 @@ const Client = function(config, socket, id, authorizeFn) {
   };
 
   // Manage Stratum Multi-Versions
-  this.handleMultiVersion = function(message) {
+  this.handleMultiVersion = function() {
 
     // AsicBoost is Not Supported
     _this.asicboost = false;

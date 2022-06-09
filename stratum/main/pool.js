@@ -33,7 +33,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   this.emitLog = function(level, limiting, text) {
     if (!limiting || !process.env.forkId || process.env.forkId === '0') {
       _this.emit('pool.log', level, text);
-      if (level === "error") _this.responseFn(text);
+      if (level === 'error') _this.responseFn(text);
     }
   };
 
@@ -101,7 +101,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
     const shareDiff = Algorithms.scrypt.diff / Number(_this.auxiliary.rpcData.target);
     shareData.blockDiffAuxiliary = shareDiff * shareMultiplier;
     return _this.auxiliary.rpcData.target >= shareData.headerDiff;
-  }
+  };
 
   // Check Percentage of Blockchain Downloaded
   this.checkDownloaded = function(daemon) {
@@ -382,7 +382,7 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
           _this.handleAuxiliary(auxShareData, true, (accepted, outputData) => {
             _this.emit('pool.share', outputData, shareType, accepted);
             _this.handlePrimaryTemplate(true, (error, result, newBlock) => {
-              if (newBlock && auxBlockValid) {
+              if (newBlock) {
                 _this.emitLog('special', false, _this.text.stratumManagerText2());
               }
             });

@@ -79,7 +79,7 @@ const Loader = function(logger, configMain) {
 
     // No Configuration Created
     } else {
-      throw new Error('Unable to find litecoin.js file. Read the installation/setup instructions')
+      throw new Error('Unable to find litecoin.js file. Read the installation/setup instructions');
     }
 
     // Return Validated Configuration

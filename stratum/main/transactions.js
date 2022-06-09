@@ -20,7 +20,7 @@ const Transactions = function(config) {
     scriptHash: Buffer.from('32', 'hex').readUInt8(0),
     wif: Buffer.from('b0', 'hex').readUInt8(0),
     coin: 'ltc',
-  }
+  };
 
   // Testnet Configuration
   this.configTestnet = {
@@ -34,7 +34,7 @@ const Transactions = function(config) {
     scriptHash: Buffer.from('C4', 'hex').readUInt8(0),
     wif: Buffer.from('EF', 'hex').readUInt8(0),
     coin: 'ltc',
-  }
+  };
 
   // Calculate Generation Transaction
   this.handleGeneration = function(rpcData, placeholder) {
@@ -125,7 +125,7 @@ const Transactions = function(config) {
     }
 
     // Build Second Part of Generation Transaction
-    let p2 = Buffer.concat([
+    const p2 = Buffer.concat([
       utils.packUInt32LE(txInSequence),
       utils.varIntBuffer(txOutputBuffers.length),
       Buffer.concat(txOutputBuffers),
@@ -133,7 +133,7 @@ const Transactions = function(config) {
     ]);
 
     return [p1, p2];
-  }
-}
+  };
+};
 
 module.exports = Transactions;

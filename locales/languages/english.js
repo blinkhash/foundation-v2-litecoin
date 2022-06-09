@@ -13,7 +13,7 @@ exports.startingMessageText6 = (height) => `Current block height: ${ height }`;
 exports.startingMessageText7 = (difficulty) => `Current block difficulty: ${ difficulty }`;
 exports.startingMessageText8 = (difficulty) => `Current network difficulty: ${ difficulty }`;
 exports.startingMessageText9 = (peers) => `Current peer count: ${ peers }`;
-exports.startingMessageText10 = () => `Server initialized successfully ...`;
+exports.startingMessageText10 = () => 'Server initialized successfully ...';
 
 // Loader Text
 exports.loaderAlgorithmsText1 = (algorithm) => `The requested mining algorithm ("${ algorithm }") is unsupported. Check your configuration files`;

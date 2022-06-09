@@ -24,9 +24,8 @@ nock.enableNetConnect('127.0.0.1');
 
 describe('Test workers functionality', () => {
 
-  let configCopy, configMainCopy, rpcDataCopy;
+  let configMainCopy, rpcDataCopy;
   beforeEach(() => {
-    configCopy = JSON.parse(JSON.stringify(config));
     configMainCopy = JSON.parse(JSON.stringify(configMain));
     rpcDataCopy = JSON.parse(JSON.stringify(testdata.getBlockTemplate()));
   });

@@ -106,7 +106,7 @@ const Manager = function(config, configMain) {
 
     // Establish Share Information
     let blockValid = false;
-    let version = job.rpcData.version;
+    const version = job.rpcData.version;
     const extraNonce1Buffer = Buffer.from(submission.extraNonce1, 'hex');
     const extraNonce2Buffer = Buffer.from(submission.extraNonce2, 'hex');
 
@@ -183,7 +183,7 @@ const Manager = function(config, configMain) {
 
     _this.emit('manager.share', shareData, auxShareData, blockValid);
     return { error: null, hash: blockHash, hex: blockHex, response: true };
-  }
+  };
 };
 
 module.exports = Manager;
