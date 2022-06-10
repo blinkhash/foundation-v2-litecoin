@@ -1,5 +1,4 @@
 const Algorithms = require('../../stratum/main/algorithms');
-const Daemon = require('../../daemon/main/daemon');
 const Pool = require('../../stratum/main/pool');
 const Text = require('../../locales/index');
 
@@ -18,31 +17,11 @@ const Stratum = function (logger, config, configMain) {
   process.setMaxListeners(0);
   this.forkId = process.env.forkId;
 
-  // Build Stratum Daemons
-  this.handleDaemons = function(callback) {
-
-    // Load Daemons from Configuration
-    const primaryDaemons = _this.config.primary.daemons;
-    const auxiliaryEnabled = _this.config.auxiliary && _this.config.auxiliary.enabled;
-    const auxiliaryDaemons = auxiliaryEnabled ? _this.config.auxiliary.daemons : [];
-
-    // Build Daemon Instances
-    const primary = new Daemon(primaryDaemons);
-    const auxiliary = new Daemon(auxiliaryDaemons);
-
-    // Initialize Daemons and Load Settings
-    primary.checkInstances(() => {
-      auxiliary.checkInstances(() => {
-        callback(primary, auxiliary);
-      });
-    });
-  };
-
   // Build Stratum from Configuration
-  this.handleStratum = function(primary, auxiliary) {
+  this.handleStratum = function() {
 
     // Build Stratum Server
-    _this.stratum = new Pool(_this.config, _this.configMain, primary, auxiliary, () => {});
+    _this.stratum = new Pool(_this.config, _this.configMain, () => {});
 
     // Handle Stratum Main Events
     _this.stratum.on('pool.started', () => {});
@@ -61,10 +40,16 @@ const Stratum = function (logger, config, configMain) {
   // Output Stratum Data on Startup
   this.outputStratum = function() {
 
+    // Build Connected Coins
+    const coins = [_this.config.primary.coin.name];
+    if (_this.config.auxiliary && _this.config.auxiliary.enabled) {
+      coins.push(_this.config.auxiliary.coin.name);
+    }
+
     // Build Pool Starting Message
     const output = [
       _this.text.startingMessageText1(`Pool-${ _this.config.primary.coin.name }`),
-      _this.text.startingMessageText2(`[${_this.config.primary.coin.name }]`),
+      _this.text.startingMessageText2(`[${ coins.join(', ') }]`),
       _this.text.startingMessageText3(_this.config.settings.testnet ? 'Testnet' : 'Mainnet'),
       _this.text.startingMessageText4(_this.stratum.statistics.ports.join(', ')),
       _this.text.startingMessageText5(_this.stratum.statistics.feePercentage * 100),
@@ -84,8 +69,8 @@ const Stratum = function (logger, config, configMain) {
   this.setupStratum = function(callback) {
 
     // Build Daemon/Stratum Functionality
-    _this.handleDaemons((primary, auxiliary) => {
-    _this.handleStratum(primary, auxiliary);
+    _this.handleStratum();
+    _this.stratum.setupDaemons(() => {
     _this.stratum.setupPorts();
     _this.stratum.setupSettings(() => {
     _this.stratum.setupRecipients();

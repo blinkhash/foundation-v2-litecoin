@@ -1,4 +1,5 @@
 const Algorithms = require('./algorithms');
+const Daemon = require('../../daemon/main/daemon');
 const Difficulty = require('./difficulty');
 const Manager = require('./manager');
 const Network = require('./network');
@@ -9,7 +10,7 @@ const utils = require('./utils');
 ////////////////////////////////////////////////////////////////////////////////
 
 // Main Pool Function
-const Pool = function(config, configMain, primary, auxiliary, responseFn) {
+const Pool = function(config, configMain, responseFn) {
 
   const _this = this;
   this.config = config;
@@ -23,10 +24,9 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
   this.responseFn = responseFn;
 
   // Pool Variables [2]
-  this.primary = { daemon: primary };
+  this.primary = {};
   this.auxiliary = {
     enabled: _this.config.auxiliary && _this.config.auxiliary.enabled,
-    daemon: auxiliary
   };
 
   // Emit Logging Events
@@ -97,10 +97,13 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
 
   // Check if Auxiliary Share is a Valid Block Candidate
   this.checkAuxiliary = function(shareData) {
-    const shareMultiplier = Algorithms.scrypt.multiplier;
-    const shareDiff = Algorithms.scrypt.diff / Number(_this.auxiliary.rpcData.target);
-    shareData.blockDiffAuxiliary = shareDiff * shareMultiplier;
-    return _this.auxiliary.rpcData.target >= shareData.headerDiff;
+    if (_this.auxiliary.enabled) {
+      const shareMultiplier = Algorithms.scrypt.multiplier;
+      const shareDiff = Algorithms.scrypt.diff / Number(_this.auxiliary.rpcData.target);
+      shareData.blockDiffAuxiliary = shareDiff * shareMultiplier;
+      return _this.auxiliary.rpcData.target >= shareData.headerDiff;
+    }
+    return false;
   };
 
   // Check Percentage of Blockchain Downloaded
@@ -267,6 +270,24 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
     });
   };
 
+  // Build Stratum Daemons
+  this.setupDaemons = function(callback) {
+
+    // Load Daemons from Configuration
+    const primaryDaemons = _this.config.primary.daemons;
+    const auxiliaryEnabled = _this.config.auxiliary && _this.config.auxiliary.enabled;
+    const auxiliaryDaemons = auxiliaryEnabled ? _this.config.auxiliary.daemons : [];
+
+    // Build Daemon Instances
+    _this.primary.daemon = new Daemon(primaryDaemons);
+    _this.auxiliary.daemon = new Daemon(auxiliaryDaemons);
+
+    // Initialize Daemons and Load Settings
+    _this.primary.daemon.checkInstances(() => {
+      _this.auxiliary.daemon.checkInstances(() => callback());
+    });
+  };
+
   // Setup Pool Ports
   this.setupPorts = function() {
 
@@ -366,29 +387,24 @@ const Pool = function(config, configMain, primary, auxiliary, responseFn) {
         shareType = 'invalid';
       }
 
+      // Process Auxiliary Submission
+      const auxBlockValid = _this.checkAuxiliary(auxShareData);
+      if (shareType === 'valid' && auxBlockValid) {
+        _this.handleAuxiliary(auxShareData, true, (accepted, outputData) => {
+          _this.emit('pool.share', outputData, shareType, accepted);
+          _this.emitLog('special', false, _this.text.stratumManagerText2());
+        });
+      }
+
       // Process Share/Primary Submission
       _this.handlePrimary(shareData, blockValid, (accepted, outputData) => {
         _this.emit('pool.share', outputData, shareType, accepted);
-        _this.handlePrimaryTemplate(false, (error, result, newBlock) => {
+        _this.handlePrimaryTemplate(auxBlockValid, (error, result, newBlock) => {
           if (newBlock && blockValid) {
             _this.emitLog('special', false, _this.text.stratumManagerText1());
           }
         });
       });
-
-      // Process Auxiliary Submission
-      if (shareType === 'valid' && _this.auxiliary.enabled) {
-        if (_this.checkAuxiliary(auxShareData)) {
-          _this.handleAuxiliary(auxShareData, true, (accepted, outputData) => {
-            _this.emit('pool.share', outputData, shareType, accepted);
-            _this.handlePrimaryTemplate(true, (error, result, newBlock) => {
-              if (newBlock) {
-                _this.emitLog('special', false, _this.text.stratumManagerText2());
-              }
-            });
-          });
-        }
-      }
     });
   };
 
