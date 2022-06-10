@@ -89,7 +89,7 @@ describe('Test daemon functionality', () => {
         instance: 'nocktest',
       }));
     const daemon = new Daemon(daemonsCopy);
-    const expected = "[{\"error\":{\"code\":-1,\"message\":\"Unauthorized RPC access. Invalid RPC username or password\"},\"response\":null,\"instance\":{\"host\":\"127.0.0.1\",\"port\":\"8332\",\"username\":\"foundation\",\"password\":\"foundation\",\"index\":0},\"data\":\"{\\\"error\\\":null,\\\"result\\\":null,\\\"instance\\\":\\\"nocktest\\\"}\"}]";
+    const expected = '[{"error":{"code":-1,"message":"Unauthorized RPC access. Invalid RPC username or password"},"response":null,"instance":{"host":"127.0.0.1","port":"8332","username":"foundation","password":"foundation","index":0},"data":"{\\"error\\":null,\\"result\\":null,\\"instance\\":\\"nocktest\\"}"}]';
     daemon.checkInstances((error, response) => {
       expect(error).toBe(true);
       expect(response).toBe(expected);

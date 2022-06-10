@@ -1,4 +1,3 @@
-const Daemon = require('../../daemon/main/daemon');
 const Pool = require('../main/pool');
 const config = require('../../configs/example');
 const configMain = require('../../configs/main');
@@ -422,7 +421,7 @@ describe('Test pool functionality', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     pool.on('pool.log', (type, text) => {
       expect(type).toBe('error');
-        expect(text).toBe('Primary daemon instance (127.0.0.1) rejected a supposedly valid block');
+      expect(text).toBe('Primary daemon instance (127.0.0.1) rejected a supposedly valid block');
       done();
     });
     mockSetupDaemons(pool, () => {
@@ -483,7 +482,7 @@ describe('Test pool functionality', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     pool.on('pool.log', (type, text) => {
       response.push([type, text]);
-        if (response.length === 2) {
+      if (response.length === 2) {
         expect(response[0][0]).toBe('special');
         expect(response[0][1]).toBe('Submitted a primary block (Litecoin:1) successfully to Litecoin\'s daemon instance(s)');
         expect(response[1][0]).toBe('error');
