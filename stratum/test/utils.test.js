@@ -11,30 +11,19 @@ network.scriptHash = Buffer.from('05', 'hex').readUInt8(0);
 network.wif = Buffer.from('80', 'hex').readUInt8(0);
 network.coin = 'btc';
 
-const networkLTC = {};
-networkLTC.bech32 = 'ltc';
-networkLTC.bip32 = {};
-networkLTC.bip32.public = Buffer.from('0488B21E', 'hex').readUInt32LE(0);
-networkLTC.bip32.private = Buffer.from('0488ADE4', 'hex').readUInt32LE(0);
-networkLTC.peerMagic = 'fbc0b6db';
-networkLTC.pubKeyHash = Buffer.from('30', 'hex').readUInt8(0);
-networkLTC.scriptHash = Buffer.from('32', 'hex').readUInt8(0);
-networkLTC.wif = Buffer.from('b0', 'hex').readUInt8(0);
-networkLTC.coin = 'ltc';
-
 ////////////////////////////////////////////////////////////////////////////////
 
 describe('Test utility functionality', () => {
 
   test('Test implemented addressToScript [1]', () => {
-    const script1 = utils.addressToScript('LRJeNFbLC28wA4hYfiV2Dyjb6hK9pLTD5y', networkLTC);
-    const script2 = utils.addressToScript('MM8rhr4SPhgjMnhQcHKtGmDNXh2Xx3rysz', networkLTC);
-    const script3 = utils.addressToScript('ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', networkLTC);
-    const script4 = utils.addressToScript('LRJeNFbLC28wA4hYfiV2Dyjb6hK9pLTD5y');
-    expect(script1).toStrictEqual(Buffer.from('76a91442b3e55275425b4b4ccf4cd92dfa498634a5d44088ac', 'hex'));
-    expect(script2).toStrictEqual(Buffer.from('a9149130d3dd8a3551352b8cfbc052df8421fa7b997d87', 'hex'));
-    expect(script3).toStrictEqual(Buffer.from('00142754f373af1a005935794a6cb3c4c3af40f3a903', 'hex'));
-    expect(script4).toStrictEqual(Buffer.from('76a91442b3e55275425b4b4ccf4cd92dfa498634a5d44088ac', 'hex'));
+    const script1 = utils.addressToScript('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2', network);
+    const script2 = utils.addressToScript('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy', network);
+    const script3 = utils.addressToScript('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', network);
+    const script4 = utils.addressToScript('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2');
+    expect(script1).toStrictEqual(Buffer.from('76a91477bff20c60e522dfaa3350c39b030a5d004e839a88ac', 'hex'));
+    expect(script2).toStrictEqual(Buffer.from('a914b472a266d0bd89c13706a4132ccfb16f7c3b9fcb87', 'hex'));
+    expect(script3).toStrictEqual(Buffer.from('0014e8df018c7e326cc253faac7e46cdc51e68542c42', 'hex'));
+    expect(script4).toStrictEqual(Buffer.from('76a91477bff20c60e522dfaa3350c39b030a5d004e839a88ac', 'hex'));
   });
 
   test('Test implemented addressToScript [2]', () => {
@@ -78,15 +67,28 @@ describe('Test utility functionality', () => {
   });
 
   test('Test implemented decodeAddress [1]', () => {
-    const script1 = utils.decodeAddress('LRJeNFbLC28wA4hYfiV2Dyjb6hK9pLTD5y', networkLTC);
-    const script2 = utils.decodeAddress('MM8rhr4SPhgjMnhQcHKtGmDNXh2Xx3rysz', networkLTC);
-    const script3 = utils.decodeAddress('ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry', networkLTC);
-    expect(script1).toStrictEqual(Buffer.from('76a91442b3e55275425b4b4ccf4cd92dfa498634a5d44088ac', 'hex'));
-    expect(script2).toStrictEqual(Buffer.from('a9149130d3dd8a3551352b8cfbc052df8421fa7b997d87', 'hex'));
-    expect(script3).toStrictEqual(Buffer.from('00142754f373af1a005935794a6cb3c4c3af40f3a903', 'hex'));
+    const script1 = utils.decodeAddress('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2', network);
+    const script2 = utils.decodeAddress('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy', network);
+    const script3 = utils.decodeAddress('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', network);
+    const script4 = utils.decodeAddress('bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3', network);
+    expect(script1).toStrictEqual(Buffer.from('76a91477bff20c60e522dfaa3350c39b030a5d004e839a88ac', 'hex'));
+    expect(script2).toStrictEqual(Buffer.from('a914b472a266d0bd89c13706a4132ccfb16f7c3b9fcb87', 'hex'));
+    expect(script3).toStrictEqual(Buffer.from('0014e8df018c7e326cc253faac7e46cdc51e68542c42', 'hex'));
+    expect(script4).toStrictEqual(Buffer.from('00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262', 'hex'));
   });
 
   test('Test implemented decodeAddress [2]', () => {
+    const script1 = utils.decodeAddress('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2', {});
+    const script2 = utils.decodeAddress('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy', {});
+    const script3 = utils.decodeAddress('bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', {});
+    const script4 = utils.decodeAddress('bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3', {});
+    expect(script1).toStrictEqual(Buffer.from('76a91477bff20c60e522dfaa3350c39b030a5d004e839a88ac', 'hex'));
+    expect(script2).toStrictEqual(Buffer.from('a914b472a266d0bd89c13706a4132ccfb16f7c3b9fcb87', 'hex'));
+    expect(script3).toStrictEqual(Buffer.from('0014e8df018c7e326cc253faac7e46cdc51e68542c42', 'hex'));
+    expect(script4).toStrictEqual(Buffer.from('00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262', 'hex'));
+  });
+
+  test('Test implemented decodeAddress [3]', () => {
     try {
       utils.decodeAddress('cd1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq', network);
     } catch(e) {
