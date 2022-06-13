@@ -9,7 +9,7 @@ config.primary.address = 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry';
 config.primary.recipients[0].address = 'LRJeNFbLC28wA4hYfiV2Dyjb6hK9pLTD5y';
 config.primary.daemons = [{
   'host': '127.0.0.1',
-  'port': '8332',
+  'port': '9332',
   'username': 'foundation',
   'password': 'foundation'
 }];
@@ -49,28 +49,28 @@ describe('Test workers functionality', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const logger = new Logger(configMainCopy);
     const workers = new Workers(logger);
-    nock('http://127.0.0.1:8332')
+    nock('http://127.0.0.1:9332')
       .post('/', (body) => body.method === 'getpeerinfo')
       .reply(200, JSON.stringify({
         id: 'nocktest',
         error: null,
         result: null,
       }));
-    nock('http://127.0.0.1:8336')
+    nock('http://127.0.0.1:9336')
       .post('/', (body) => body.method === 'getpeerinfo')
       .reply(200, JSON.stringify({
         id: 'nocktest',
         error: null,
         result: null,
       }));
-    nock('http://127.0.0.1:8332')
+    nock('http://127.0.0.1:9332')
       .post('/').reply(200, JSON.stringify([
         { id: 'nocktest', error: null, result: { isvalid: true, address: 'ltc1qya20xua0rgq9jdteffkt83xr4aq082gruc2gry' }},
         { id: 'nocktest', error: null, result: { networkhashps: 0 }},
         { id: 'nocktest', error: null, result: { chain: 'main', difficulty: 0 }},
         { id: 'nocktest', error: null, result: { protocolversion: 1, connections: 1 }},
       ]));
-    nock('http://127.0.0.1:8332')
+    nock('http://127.0.0.1:9332')
       .persist()
       .post('/', (body) => body.method === 'getblocktemplate')
       .reply(200, JSON.stringify({
