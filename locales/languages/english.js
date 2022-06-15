@@ -61,6 +61,7 @@ exports.stratumSettingsText2 = (request, error) => `Could not start pool, error 
 exports.stratumSettingsText3 = () => 'The daemon reports that the given address is not valid';
 exports.stratumSettingsText4 = () => 'The daemon could not determine the coin\'s method of block submission';
 exports.stratumSharesText1 = (difficulty, actual, address, ip) => `A share was accepted at difficulty ${ difficulty }/${ actual || 0 } by ${ address } [${ ip }]`;
+exports.stratumSharesText2 = (error, address, ip) => `A share was rejected (${ error }) from ${ address } [${ ip }]`;
 exports.stratumTemplateText1 = (host, error) => `RPC error with primary daemon instance (${ host }) when requesting a primary template update: ${ error }`;
 exports.stratumTemplateText2 = (host, error) => `RPC error with auxiliary daemon instance (${ host }) when requesting an auxiliary template update: ${ error }`;
 exports.stratumWorkersText1 = (address, ip, port) => `Authorized worker: ${ address } (${ ip }:${ port })`;
