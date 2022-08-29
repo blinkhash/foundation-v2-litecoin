@@ -52,6 +52,7 @@ config.primary.address = '[address]';
 config.primary.coin = {};
 config.primary.coin.name = 'Litecoin';
 config.primary.coin.symbol = 'LTC';
+config.primary.coin.algorithm = 'scrypt';
 
 // Daemon Configuration
 config.primary.daemons = [];
