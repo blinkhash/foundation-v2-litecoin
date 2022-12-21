@@ -67,20 +67,13 @@ describe('Test template functionality', () => {
     expect(coinbaseHash).toStrictEqual(Buffer.from('afd031100bff85a9ac01f1718be0b3d6c20228592f0242ea1e4d91a519b53031', 'hex'));
   });
 
-  test('Test header serialization [1]', () => {
+  test('Test header serialization', () => {
     const template = new Template(jobId.toString(16), configCopy, rpcDataCopy, extraNonce);
     const merkleRoot = '3130b519a5914d1eea42022f592802c2d6b3e08b71f101aca985ff0b1031d0af';
     const time = '6036c54f'.toString('hex');
     const nonce = 'fe1a0000'.toString('hex');
     const headerBuffer = template.handleHeader(template.rpcData.version, merkleRoot, time, nonce);
     expect(headerBuffer).toStrictEqual(Buffer.from('00000020e22777bc309503ee6be3c65f370ba629b6497dbe8b804cbd8365ef83fbae199700060003000008000701000100010000000908050000000001000301000000004fc53660f0ff0f1e00001afe', 'hex'));
-  });
-
-  test('Test header serialization [2]', () => {
-    const headerBuffer = Buffer.from('00000020e22777bc309503ee6be3c65f370ba629b6497dbe8b804cbd8365ef83fbae1997afd031100bff85a9ac01f1718be0b3d6c20228592f0242ea1e4d91a519b530314fc53660f0ff0f1e00001afe', 'hex');
-    const hashDigest = Algorithms.scrypt.hash();
-    const headerHash = hashDigest(headerBuffer, 1614202191);
-    expect(headerHash).toStrictEqual(Buffer.from('3748391bfdaaa2a44424028a12fa508f94bb9ca879b2430a41cfa6e171040000', 'hex'));
   });
 
   test('Test block serialization [1]', () => {
