@@ -2122,12 +2122,13 @@ describe('Test pool functionality', () => {
           error: null,
           result: transactionDataCopy,
         }));
-      const blocks1 = { transaction: 'transaction1'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
       const expected = {
         transaction: 'transaction1',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handlePrimaryRounds([blocks1], (error, result) => {
         expect(result[0]).toStrictEqual(expected);
@@ -2144,19 +2145,21 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: null, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handlePrimaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2174,17 +2177,19 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: { code: -5 }, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
-        category: 'orphan'
+        category: 'orphan',
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handlePrimaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2202,13 +2207,14 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: true, result: null },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handlePrimaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(blocks1);
@@ -2227,15 +2233,17 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: null, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
-        category: 'orphan'
+        category: 'orphan',
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'orphan',
+        previous: 'pending',
       };
       pool.handlePrimaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2276,12 +2284,13 @@ describe('Test pool functionality', () => {
           error: null,
           result: transactionDataCopy,
         }));
-      const blocks1 = { transaction: 'transaction1'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
       const expected = {
         transaction: 'transaction1',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handleAuxiliaryRounds([blocks1], (error, result) => {
         expect(result[0]).toStrictEqual(expected);
@@ -2300,19 +2309,21 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: null, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handleAuxiliaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2332,17 +2343,19 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: { code: -5 }, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
-        category: 'orphan'
+        category: 'orphan',
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handleAuxiliaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2362,13 +2375,14 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: true, result: null },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction2',
         category: 'immature',
         confirmations: 39,
-        reward: 10000
+        reward: 10000,
+        previous: 'pending',
       };
       pool.handleAuxiliaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(blocks1);
@@ -2389,15 +2403,17 @@ describe('Test pool functionality', () => {
           { id: 'nocktest', error: null, result: transactionDataCopy },
           { id: 'nocktest', error: null, result: transactionDataCopy },
         ]));
-      const blocks1 = { transaction: 'transaction1'};
-      const blocks2 = { transaction: 'transaction2'};
+      const blocks1 = { category: 'pending', transaction: 'transaction1'};
+      const blocks2 = { category: 'pending', transaction: 'transaction2'};
       const expected1 = {
         transaction: 'transaction1',
-        category: 'orphan'
+        category: 'orphan',
+        previous: 'pending',
       };
       const expected2 = {
         transaction: 'transaction2',
         category: 'orphan',
+        previous: 'pending',
       };
       pool.handleAuxiliaryRounds([blocks1, blocks2], (error, result) => {
         expect(result[0]).toStrictEqual(expected1);
@@ -2446,7 +2462,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2487,7 +2504,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2528,7 +2546,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2574,7 +2593,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2621,7 +2641,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2662,7 +2683,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2703,7 +2725,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2732,6 +2755,90 @@ describe('Test pool functionality', () => {
       timestamp: '1662753912672',
       miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
       worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker1',
+      category: 'orphan',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'primary',
+      previous: 'immature',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'primary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const expected = { 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6': { 'immature': -10000, 'generate': 0 }};
+    pool.handlePrimaryWorkers([blocks1], [[worker1]], (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [9]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker1',
+      category: 'orphan',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'primary',
+      previous: 'generate',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'primary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const expected = { 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6': { 'immature': 0, 'generate': -10000 }};
+    pool.handlePrimaryWorkers([blocks1], [[worker1]], (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [10]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker1',
       category: 'pending',
       confirmations: 3,
       difficulty: 15.999771117945784,
@@ -2743,7 +2850,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2765,7 +2873,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [9]', () => {
+  test('Test pool workers handling [11]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2783,7 +2891,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2805,7 +2914,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [10]', () => {
+  test('Test pool workers handling [12]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2823,7 +2932,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2852,7 +2962,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [11]', () => {
+  test('Test pool workers handling [13]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2870,7 +2980,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2893,7 +3004,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [12]', () => {
+  test('Test pool workers handling [14]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2911,7 +3022,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2934,7 +3046,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [13]', () => {
+  test('Test pool workers handling [15]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2952,7 +3064,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -2980,7 +3093,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [14]', () => {
+  test('Test pool workers handling [16]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -2998,7 +3111,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3027,7 +3141,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [15]', () => {
+  test('Test pool workers handling [17]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3045,7 +3159,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3068,7 +3183,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [16]', () => {
+  test('Test pool workers handling [18]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3086,7 +3201,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3109,7 +3225,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [17]', () => {
+  test('Test pool workers handling [19]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3127,7 +3243,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3149,7 +3266,91 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [18]', () => {
+  test('Test pool workers handling [20]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker1',
+      category: 'orphan',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'auxiliary',
+      previous: 'immature',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'auxiliary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const expected = { 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6': { 'immature': -10000, 'generate': 0 }};
+    pool.handleAuxiliaryWorkers([blocks1], [[worker1]], (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [21]', () => {
+    const pool = new Pool(configCopy, configMainCopy, () => {});
+    const blocks1 = {
+      id: '1',
+      timestamp: '1662753912672',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker1',
+      category: 'orphan',
+      confirmations: 3,
+      difficulty: 15.999771117945784,
+      hash: '74b87851515089cc1ba89fa15c86f30c19e79a13f758aa05ee4b910a7158eb29',
+      height: 4025118,
+      identifier: 'master',
+      luck: 12.500178816662851,
+      reward: 10000,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
+      type: 'auxiliary',
+      previous: 'generate',
+    };
+    const worker1 = {
+      id: '2',
+      timestamp: '1662737864590',
+      miner: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6',
+      worker: 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6.worker4',
+      identifier: 'master',
+      invalid: 0,
+      round: '15c8343c-9751-4c67-aafa-29ff296da484',
+      solo: false,
+      stale: 0,
+      times: 276.95300000000003,
+      type: 'auxiliary',
+      valid: 22,
+      work: 29.489361720000005
+    };
+    const expected = { 'na1CV4odThQ4mfzxQNhDbH4EN82bRukjq6': { 'immature': 0, 'generate': -10000 }};
+    pool.handleAuxiliaryWorkers([blocks1], [[worker1]], (results) => {
+      expect(results).toStrictEqual(expected);
+    });
+  });
+
+  test('Test pool workers handling [22]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3167,7 +3368,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3189,7 +3391,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [19]', () => {
+  test('Test pool workers handling [23]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3207,7 +3409,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'primary'
+      type: 'primary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
@@ -3229,7 +3432,7 @@ describe('Test pool functionality', () => {
     });
   });
 
-  test('Test pool workers handling [20]', () => {
+  test('Test pool workers handling [24]', () => {
     const pool = new Pool(configCopy, configMainCopy, () => {});
     const blocks1 = {
       id: '1',
@@ -3247,7 +3450,8 @@ describe('Test pool functionality', () => {
       round: '15c8343c-9751-4c67-aafa-29ff296da484',
       solo: false,
       transaction: '01905e07123f9edb0439376639ad530207f9e313faee4708418a45bfc43e52be',
-      type: 'auxiliary'
+      type: 'auxiliary',
+      previous: 'pending',
     };
     const worker1 = {
       id: '2',
