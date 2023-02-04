@@ -78,6 +78,12 @@ recipient1.address = '[address]';
 recipient1.percentage = 0.05;
 config.primary.recipients.push(recipient1);
 
+// Blinkhash Donation Address
+const recipient2 = {};
+recipient2.address = 'M8hA7wbyw39qChoDYerR1Gyp9pdDCZvpvz';
+recipient2.percentage = 0.001;
+config.primary.recipients.push(recipient2);
+
 // ZMQ Configuration
 config.primary.zmq = {};
 config.primary.zmq.enabled = false;
